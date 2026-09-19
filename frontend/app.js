@@ -280,9 +280,22 @@ function renderAuthArea() {
   document.getElementById("adminBottomBtn").hidden = !isAdmin;
 
   if (state.user) {
-    el.innerHTML = `<button class="settings-gear-btn" id="settingsGearBtn" title="Account settings">⚙</button><button class="auth-pill logged-in" id="logoutBtn">${escapeHtml(state.user.name.split(" ")[0])} · ${state.user.role} · Log out</button>`;
+    el.innerHTML = `
+      <div class="profile-menu-wrap">
+        <button class="auth-pill logged-in" id="profileMenuBtn" aria-expanded="false">📚 ${escapeHtml(state.user.name.split(" ")[0])} <span class="profile-caret">⌄</span></button>
+        <div class="profile-menu" id="profileMenu" hidden>
+          <div class="profile-menu-head"><strong>${escapeHtml(state.user.name)}</strong><span>${escapeHtml(state.user.role)}</span></div>
+          <button id="profileSettingsBtn">⚙ Account settings</button>
+          <button id="logoutBtn">↪ Log out</button>
+        </div>
+      </div>`;
+    document.getElementById("profileMenuBtn").addEventListener("click", () => {
+      const menu = document.getElementById("profileMenu");
+      menu.hidden = !menu.hidden;
+      document.getElementById("profileMenuBtn").setAttribute("aria-expanded", String(!menu.hidden));
+    });
     document.getElementById("logoutBtn").addEventListener("click", logout);
-    document.getElementById("settingsGearBtn").addEventListener("click", openSettingsModal);
+    document.getElementById("profileSettingsBtn").addEventListener("click", openSettingsModal);
     document.getElementById("accountLabel").textContent = state.user.name.split(" ")[0];
     renderVerifyBanner();
   } else {
@@ -291,6 +304,13 @@ function renderAuthArea() {
     document.getElementById("accountLabel").textContent = "Account";
   }
 }
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".profile-menu-wrap")) {
+    const menu = document.getElementById("profileMenu");
+    if (menu) menu.hidden = true;
+  }
+});
 
 document.getElementById("accountBottomBtn").addEventListener("click", () => {
   if (state.user) navigate("loans");
@@ -351,9 +371,13 @@ async function loadHomeCatalog() {
   const grid = document.getElementById("homeCatalogGrid");
   const meta = document.getElementById("homeCatalogMeta");
   if (btn) { btn.hidden = false; btn.disabled = true; btn.textContent = "Loading…"; }
+  if (state.homeCatalogPage === 1 && !grid.children.length) {
+    grid.innerHTML = Array.from({ length: 8 }, () => `<div class="skeleton-card" aria-hidden="true"><div class="skeleton-cover"></div><div class="skeleton-line short"></div><div class="skeleton-line"></div><div class="skeleton-line tiny"></div></div>`).join("");
+  }
 
   try {
     const data = await apiFetch(`/books/search?page=${state.homeCatalogPage}&limit=24`);
+    if (state.homeCatalogPage === 1) grid.innerHTML = "";
     meta.textContent = `${data.total.toLocaleString()} books across ${state.categories.length || 30} departments`;
 
     data.books.forEach((book) => {
@@ -385,6 +409,7 @@ async function loadHomeCatalog() {
       if (btn) { btn.hidden = false; btn.disabled = false; btn.textContent = "Load more books"; }
     }
   } catch (e) {
+    if (state.homeCatalogPage === 1) grid.innerHTML = "";
     meta.textContent = "Couldn't load the catalog. Check the server connection (top right).";
     if (btn) btn.hidden = true;
   } finally {
@@ -1892,76 +1917,6 @@ document.getElementById("startScanBtn").addEventListener("click", async () => {
     );
   } catch (err) {
     resultEl.innerHTML = `<p class="hint">Couldn't access the camera: ${escapeHtml(err.message)}</p>`;
-  }
-});
-
-/* ===================== CHATBOT (real LLM via backend, with FAQ fallback) ===================== */
-let chatHistory = [];
-let chatbotOpened = false;
-
-function addChatMsg(text, who) {
-  const wrap = document.getElementById("chatbotMessages");
-  const msg = document.createElement("div");
-  msg.className = `chat-msg ${who}`;
-  msg.textContent = text;
-  wrap.appendChild(msg);
-  wrap.scrollTop = wrap.scrollHeight;
-  return msg;
-}
-
-function addTypingIndicator() {
-  const wrap = document.getElementById("chatbotMessages");
-  const msg = document.createElement("div");
-  msg.className = "chat-msg bot typing";
-  msg.id = "typingIndicator";
-  msg.textContent = "…";
-  wrap.appendChild(msg);
-  wrap.scrollTop = wrap.scrollHeight;
-}
-function removeTypingIndicator() {
-  document.getElementById("typingIndicator")?.remove();
-}
-
-const chatbotFab = document.getElementById("chatbotFab");
-const chatbotPanel = document.getElementById("chatbotPanel");
-chatbotFab.addEventListener("click", () => {
-  chatbotPanel.hidden = !chatbotPanel.hidden;
-  if (!chatbotPanel.hidden && !chatbotOpened) {
-    chatbotOpened = true;
-    addChatMsg("Hi! I can help with borrowing, returns, fines, reservations, and book search. What do you need?", "bot");
-  }
-});
-document.getElementById("chatbotClose").addEventListener("click", () => (chatbotPanel.hidden = true));
-
-document.getElementById("chatbotForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const input = document.getElementById("chatbotInput");
-  const text = input.value.trim();
-  if (!text) return;
-  addChatMsg(text, "user");
-  input.value = "";
-  addTypingIndicator();
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 20000);
-
-  try {
-    const data = await apiFetch("/chatbot", {
-      method: "POST",
-      body: JSON.stringify({ message: text, history: chatHistory }),
-      signal: controller.signal,
-    });
-    clearTimeout(timeout);
-    removeTypingIndicator();
-    addChatMsg(data.reply, "bot");
-    if (data.mode === "llm" && data.updatedHistory) chatHistory = data.updatedHistory;
-  } catch (err) {
-    clearTimeout(timeout);
-    removeTypingIndicator();
-    const msg = err.name === "AbortError"
-      ? "That took too long to answer — try a shorter question, or check the server connection."
-      : "Sorry, I couldn't reach the assistant right now. Check the server connection.";
-    addChatMsg(msg, "bot");
   }
 });
 

@@ -105,11 +105,6 @@ submission.
 - [ ] Scanning it with the in-app scanner (Admin → Scan) correctly identifies the book
 - [ ] Scan-to-borrow / scan-to-return completes the transaction
 
-## AI Chatbot
-- [ ] With `ANTHROPIC_API_KEY` set, asking about a specific book returns a real, accurate answer (availability, category) pulled from the actual catalog
-- [ ] Without an API key configured, the chatbot still responds to basic FAQ questions instead of erroring
-- [ ] A network/server error while chatting shows a friendly message instead of breaking the widget
-
 ## Book Covers & Home Page
 - [ ] Browse and book-detail pages show a designed placeholder cover (gradient + spine) while a real cover loads
 - [ ] Real, well-known titles (e.g. "Introduction to Algorithms") upgrade to an actual cover image once Open Library returns a match

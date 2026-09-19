@@ -10,7 +10,7 @@ A full university library project: requirement analysis document, MongoDB databa
 - **Protected Librarian sign-up** — creating a Librarian account requires a secret access code set by the project owner (`LIBRARIAN_SIGNUP_CODE` in `.env`); students can't just pick "Librarian" from the dropdown and get in. Admin accounts can never be self-registered at all — only an existing admin can promote someone via `PATCH /api/users/:id/role`
 - **Forgot / Reset password** — real email flow via Gmail SMTP
 - **Real book cover images** — looked up automatically via the free Open Library API and cached, with a colorful initials-based cover as fallback for the (many) synthetically-generated catalog entries that don't match a real published book
-- **AI chatbot** — a floating assistant powered by Claude (Anthropic API) that can actually search the live catalog and answer specific questions ("do you have Introduction to Algorithms?") — falls back to a small hardcoded FAQ if no API key is configured, so it never just breaks
+- **Ask a librarian** — a direct contact form sends questions to the library team by email
 - **Borrow / Return / Reserve** — borrow or reserve a book from its detail card, return it from My Loans, fines calculate automatically for late returns, reservation holders get emailed when a book becomes available
 - **Ratings & recommendations** — rate a book you've returned; "You might also like" suggests similar titles
 - **My Loans** — see everything you've borrowed, due dates, overdue warnings, outstanding fines
@@ -77,7 +77,6 @@ read can't (e.g. a typo only Mongo itself would reject, or an env var you haven'
 Being upfront about the remaining gap from the original wishlist:
 - Offline **data** browsing (the PWA caches the app shell, not the book catalog itself)
 - Deep learning / embedding-based recommendations (current one is collaborative co-borrow + category fallback, no trained ML model)
-- The AI chatbot needs your own Anthropic API key to do more than answer a few FAQ questions (see setup below) — this is a real cost/usage consideration, not a code limitation
 - Book cover lookups only succeed for titles that actually exist in Open Library — most of the 50,000+ synthetically-generated catalog entries will show the designed fallback cover instead of a real photo, which is expected given the scale needed for a course project
 
 
@@ -97,7 +96,7 @@ LibraryMS/
 │   ├── models/                               ← Book, User, Transaction, Room, RoomBooking,
 │   │                                            BookSuggestion, Notification, Announcement, AuditLog
 │   ├── routes/                                ← one file per feature area: auth, books, users,
-│   │                                            transactions, reports, chatbot, rooms, suggestions,
+│   │                                            transactions, reports, rooms, suggestions,
 │   │                                            notifications, announcements, contact
 │   ├── middleware/                           ← JWT auth/role guards, centralized error handler
 │   ├── utils/                                ← validators, CSV/PDF writers, audit logger,
@@ -158,16 +157,6 @@ cp .env.example .env
    APP_URL=http://localhost:3000
    ```
 4. If you skip this, the app still works — it just logs a warning and skips sending the email instead of failing.
-
-**To enable the real AI chatbot (optional):**
-1. Get an API key at https://console.anthropic.com (there's a free credit allowance for new accounts)
-2. In `.env`, set `ANTHROPIC_API_KEY=sk-ant-...`
-3. **Important:** run `npm install` again after adding this — the `@anthropic-ai/sdk` package needs to be installed, or the chatbot will fail to start. (This is now handled gracefully — a missing package no longer crashes the whole server, just disables AI mode — but you still need `npm install` for AI mode to actually turn on.)
-4. Restart the server (`npm start`) and check the terminal: it prints `🤖 Chatbot: AI mode` or `🤖 Chatbot: FAQ fallback mode` on startup, so you always know which mode it's running in
-5. Without this, the chatbot still works but only answers a handful of hardcoded FAQ questions instead of understanding free-form questions and searching the catalog for real answers
-6. Note: this uses a paid API past the free credits — keep an eye on usage if you deploy this publicly
-
-**Chatbot not responding at all?** Open the browser console (F12 → Console tab) while sending a message — a red error there usually points to the cause. Most common cause: the backend crashed on startup (check the backend terminal for errors) or isn't running at all.
 
 **About book cover images:** the app automatically looks up a real cover for each book via the free Open Library API the first time it's viewed, and caches the result so it's instant after that. Since most of the 50,000+ catalog entries are synthetically generated for course-project scale (not real published books), many won't have a real match — those fall back to a colorful cover with the book's initials, which is expected and by design, not a bug.
 
@@ -321,7 +310,6 @@ Computer Science, Engineering, Mathematics, Physics, Chemistry, Biology, Busines
 | GET | `/api/reports/analytics` | Librarian/Admin | Most-borrowed, category demand, top readers |
 | GET | `/api/reports/audit-log` | Librarian/Admin | Activity trail of catalog/member changes |
 | GET | `/api/reports/trending` | — | Most-borrowed books this week (home page) |
-| POST | `/api/chatbot` | — | AI assistant — ask about books, borrowing, fines, etc. |
 | GET | `/api/books/new-arrivals` | — | Most recently added books (home page) |
 | GET / POST | `/api/rooms` | — / Librarian | List rooms / add a room |
 | GET | `/api/rooms/:id/availability?date=` | — | Which hourly slots are free on a given date |

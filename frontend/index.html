@@ -227,7 +227,13 @@
       </section>
 
       <section class="shelf-section" id="trendingSection" hidden>
-        <h2 class="section-title">Trending this week</h2>
+        <div class="section-heading-row shelf-heading">
+          <div>
+            <p class="eyebrow">Featured shelf</p>
+            <h2 class="section-title">Trending this week</h2>
+          </div>
+          <span class="guide-badge">Popular now</span>
+        </div>
         <div class="shelf-row" id="trendingRow"></div>
       </section>
 
@@ -305,7 +311,7 @@
     <!-- ADMIN / LIBRARIAN VIEW -->
     <section class="view" id="view-admin" hidden>
       <h2 class="section-title">Librarian dashboard</h2>
-      <div class="admin-tabs">
+      <div class="admin-tabs" role="tablist" aria-label="Librarian dashboard sections">
         <button class="admin-tab active" data-admintab="reports">Reports</button>
         <button class="admin-tab" data-admintab="books">Books</button>
         <button class="admin-tab" data-admintab="addbook">Add a book</button>
@@ -460,20 +466,6 @@
   </nav>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <!-- ============ CHATBOT WIDGET ============ -->
-  <button class="chatbot-fab" id="chatbotFab" aria-label="Open help assistant">💬</button>
-  <div class="chatbot-panel" id="chatbotPanel" hidden>
-    <div class="chatbot-header">
-      <span>LibraryMS Assistant</span>
-      <button id="chatbotClose" aria-label="Close assistant">✕</button>
-    </div>
-    <div class="chatbot-messages" id="chatbotMessages"></div>
-    <form class="chatbot-input-row" id="chatbotForm">
-      <input type="text" id="chatbotInput" placeholder="Ask about borrowing, fines, hours…" autocomplete="off" />
-      <button type="submit" aria-label="Send">➤</button>
-    </form>
-  </div>
 
 <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
