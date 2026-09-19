@@ -28,7 +28,7 @@
   --navy: #F1ECE0;
 }
 [data-theme="dark"] body {
-  background: linear-gradient(135deg, var(--paper) 0%, #24231E 58%, #1D2930 100%);
+  background: linear-gradient(135deg, #172A35 0%, #252722 58%, #30281F 100%);
 }
 
 body { transition: background 0.2s ease, color 0.2s ease; }
@@ -38,7 +38,7 @@ html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  background: linear-gradient(135deg, var(--paper) 0%, #F5F2EC 56%, #E1EBEE 100%);
+  background: linear-gradient(135deg, #D5E4E9 0%, #EEF0EB 52%, #F2E5D2 100%);
   background-attachment: fixed;
   color: var(--ink);
   font-family: 'Inter', sans-serif;
@@ -55,9 +55,10 @@ input, select { font-family: inherit; }
   align-items: center;
   gap: 24px;
   padding: 14px 32px;
-  border-bottom: 1px solid rgba(24,52,74,0.18);
-  background: rgba(255,253,252,0.88);
-  box-shadow: 0 4px 18px rgba(24,52,74,0.08);
+  border-bottom: 3px solid var(--accent);
+  background: #18344A;
+  color: #fff;
+  box-shadow: 0 5px 20px rgba(24,52,74,0.24);
   backdrop-filter: blur(14px);
   position: sticky;
   top: 0;
@@ -68,7 +69,7 @@ input, select { font-family: inherit; }
   font-family: 'Fraunces', serif;
   font-size: 22px;
   font-weight: 700;
-  color: var(--navy);
+  color: #fff;
   border: 2px solid var(--accent);
   width: 32px; height: 32px;
   display: flex; align-items: center; justify-content: center;
@@ -81,12 +82,12 @@ input, select { font-family: inherit; }
 .nav-link {
   background: none; border: none;
   font-size: 14px; font-weight: 600;
-  color: var(--ink-soft);
+  color: #D5E4E9;
   padding: 8px 14px;
   border-radius: 6px;
 }
-.nav-link:hover { background: #E7F1F0; color: var(--accent-2); transform: translateY(-1px); }
-.nav-link.active { background: var(--navy); color: #fff; box-shadow: 0 4px 10px rgba(24,52,74,0.18); }
+.nav-link:hover { background: #2A526B; color: #fff; transform: translateY(-1px); }
+.nav-link.active { background: var(--accent); color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 
 .topbar-right { display: flex; align-items: center; gap: 10px; margin-left: auto; }
 .lang-select {
