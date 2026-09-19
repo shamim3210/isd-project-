@@ -101,19 +101,6 @@ function updateConnDot(ok) {
   document.getElementById("connDot").classList.toggle("ok", ok);
 }
 
-/* ===================== DARK MODE ===================== */
-function applyTheme(theme) {
-  document.documentElement.setAttribute("data-theme", theme);
-  document.getElementById("themeToggleBtn").textContent = theme === "dark" ? "☀" : "☾";
-  localStorage.setItem("librarims_theme", theme);
-}
-document.getElementById("themeToggleBtn").addEventListener("click", () => {
-  const current = document.documentElement.getAttribute("data-theme") === "dark" ? "light" : "dark";
-  applyTheme(current);
-  if (!document.getElementById("panel-analytics").hidden) loadAnalytics();
-});
-applyTheme(localStorage.getItem("librarims_theme") || "light");
-
 /* ===================== LANGUAGE ===================== */
 document.getElementById("langSelect").value = localStorage.getItem("librarims_lang") || "en";
 document.getElementById("langSelect").addEventListener("change", (e) => setLanguage(e.target.value));
@@ -1594,12 +1581,11 @@ let mostBorrowedChartInstance = null;
 let categoryChartInstance = null;
 
 function themeChartColors() {
-  const dark = document.documentElement.getAttribute("data-theme") === "dark";
   return {
-    text: dark ? "#B8B09A" : "#5B5648",
-    grid: dark ? "#453F30" : "#C9C0A8",
-    accent: dark ? "#C97A5E" : "#7A3B2E",
-    palette: ["#7A3B2E", "#2E5339", "#1D4ED8", "#6D28D9", "#B0472F", "#0F766E", "#854F0B", "#993556"],
+    text: "#405765",
+    grid: "#B9D0D8",
+    accent: "#C45C3B",
+    palette: ["#C45C3B", "#0F766E", "#2B6F9B", "#C28A2C", "#7A4D9B", "#3B7D5E", "#B34E62", "#506A7A"],
   };
 }
 

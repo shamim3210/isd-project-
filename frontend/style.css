@@ -1,16 +1,16 @@
 :root {
-  --paper: #E8EEF1;
+  --paper: #DDEEF3;
   --card: rgba(255,255,255,0.68);
-  --ink: #17232D;
-  --ink-soft: #596873;
-  --rule: #C8D3D9;
-  --accent: #C45C3B;
-  --accent-dark: #9F432A;
+  --ink: #173242;
+  --ink-soft: #536B78;
+  --rule: #B9D0D8;
+  --accent: #B84F39;
+  --accent-dark: #963B2B;
   --accent-2: #0F766E;
   --stamp: #C45C3B;
   --success: #0F766E;
   --danger: #C2413C;
-  --navy: #18344A;
+  --navy: #15566B;
   --glass-border: rgba(255,255,255,0.72);
   --glass-shadow: 0 12px 30px rgba(31,61,78,0.12);
 }
@@ -59,7 +59,7 @@ html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  background: linear-gradient(120deg, #CFE9ED 0%, #EEF3EC 42%, #F4E4D2 70%, #DDE8F2 100%);
+  background: linear-gradient(120deg, #CBEAF1 0%, #E4F2F1 45%, #F4EBDD 72%, #D6EAF2 100%);
   background-attachment: fixed;
   color: var(--ink);
   font-family: 'Roboto Slab', serif;
@@ -76,10 +76,10 @@ input, select { font-family: inherit; }
   align-items: center;
   gap: 24px;
   padding: 14px 32px;
-  border-bottom: 3px solid var(--accent);
-  background: rgba(24,52,74,0.88);
+  border-bottom: 3px solid #E19A58;
+  background: rgba(21,86,107,0.94);
   color: #fff;
-  box-shadow: 0 5px 20px rgba(24,52,74,0.24);
+  box-shadow: 0 5px 20px rgba(21,86,107,0.24);
   backdrop-filter: blur(18px) saturate(135%);
   position: sticky;
   top: 0;
