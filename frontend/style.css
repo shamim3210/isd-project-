@@ -34,6 +34,23 @@
 [data-theme="dark"] body {
   background: linear-gradient(135deg, #172A35 0%, #252722 58%, #30281F 100%);
 }
+[data-theme="dark"] .modal input,
+[data-theme="dark"] .modal select,
+[data-theme="dark"] .auth-form input,
+[data-theme="dark"] .auth-form select,
+[data-theme="dark"] .admin-form input,
+[data-theme="dark"] .admin-form select {
+  background: rgba(255,255,255,0.08);
+  color: var(--ink);
+}
+[data-theme="dark"] .btn-ghost:hover { background: #2A3A43; color: #fff; }
+[data-theme="dark"] a { color: #8AD8FF; }
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder { color: #B7C5CB; opacity: 1; }
+[data-theme="dark"] .fine-banner { background: #452632; color: #FFD6DD; }
+[data-theme="dark"] .loan-badge.borrowed { background: #173D37; color: #A8F0D4; }
+[data-theme="dark"] .loan-badge.overdue { background: #452632; color: #FFD6DD; }
+[data-theme="dark"] .loan-badge.returned { background: #383832; color: #E8E6D9; }
 
 body { transition: background 0.2s ease, color 0.2s ease; }
 
@@ -45,7 +62,7 @@ body {
   background: linear-gradient(120deg, #CFE9ED 0%, #EEF3EC 42%, #F4E4D2 70%, #DDE8F2 100%);
   background-attachment: fixed;
   color: var(--ink);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Roboto Slab', serif;
   padding-bottom: 0;
 }
 
@@ -70,7 +87,7 @@ input, select { font-family: inherit; }
 }
 .brand { display: flex; align-items: center; gap: 10px; cursor: pointer; }
 .brand-mark {
-  font-family: 'Fraunces', serif;
+  font-family: 'Roboto Slab', serif;
   font-size: 18px;
   font-weight: 700;
   color: #fff;
@@ -82,7 +99,7 @@ input, select { font-family: inherit; }
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.34);
   flex-shrink: 0;
 }
-.brand-name { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 600; }
+.brand-name { font-family: 'Roboto Slab', serif; font-size: 19px; font-weight: 600; }
 
 .top-nav { display: flex; gap: 6px; flex: 1; }
 .nav-link {
@@ -146,7 +163,7 @@ input, select { font-family: inherit; }
   max-height: 88vh;
   overflow-y: auto;
 }
-.modal h3 { font-family: 'Fraunces', serif; margin: 0 0 10px; font-size: 22px; }
+.modal h3 { font-family: 'Roboto Slab', serif; margin: 0 0 10px; font-size: 22px; }
 .modal-hint { font-size: 13px; color: var(--ink-soft); line-height: 1.5; margin-bottom: 14px; }
 .modal input, .modal select {
   width: 100%; padding: 11px 12px; margin-bottom: 10px;
@@ -198,7 +215,7 @@ input, select { font-family: inherit; }
   text-transform: uppercase; letter-spacing: 0.1em; margin: 0 0 12px;
 }
 .hero h1 {
-  font-family: 'Fraunces', serif; font-size: clamp(28px, 5vw, 48px);
+  font-family: 'Roboto Slab', serif; font-size: clamp(28px, 5vw, 48px);
   line-height: 1.1; font-weight: 600; margin: 0 0 28px;
 }
 .how-it-works {
@@ -230,7 +247,7 @@ input, select { font-family: inherit; }
 .guide-card:nth-child(2) .guide-icon { background: var(--accent-2); }
 .guide-card:nth-child(3) .guide-icon { background: #C28A2C; }
 .guide-card:nth-child(4) .guide-icon { background: var(--navy); }
-.guide-card h3 { margin: 0 0 7px; font: 600 17px 'Fraunces', serif; }
+.guide-card h3 { margin: 0 0 7px; font: 600 17px 'Roboto Slab', serif; }
 .guide-card p { margin: 0; color: var(--ink-soft); font-size: 12px; line-height: 1.55; }
 .search-row { display: flex; gap: 10px; border-bottom: 2px solid var(--ink); padding-bottom: 14px; flex-wrap: wrap; }
 .search-row input {
@@ -255,11 +272,11 @@ input, select { font-family: inherit; }
   box-shadow: var(--glass-shadow); backdrop-filter: blur(12px);
   padding: 16px; text-align: center;
 }
-.stat-box .num { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--accent); }
+.stat-box .num { font-family: 'Roboto Slab', serif; font-size: 26px; font-weight: 700; color: var(--accent); }
 .stat-box .lbl { font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
 
-.section-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; margin: 0 0 18px; }
-.sub-title { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; margin: 26px 0 12px; }
+.section-title { font-family: 'Roboto Slab', serif; font-size: 22px; font-weight: 600; margin: 0 0 18px; }
+.sub-title { font-family: 'Roboto Slab', serif; font-size: 17px; font-weight: 600; margin: 26px 0 12px; }
 
 .cat-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
 .cat-chip {
@@ -302,7 +319,7 @@ input, select { font-family: inherit; }
   font-family: 'JetBrains Mono', monospace; font-size: 10px; text-transform: uppercase;
   letter-spacing: 0.05em; color: var(--accent-2); margin-bottom: 8px; display: inline-block;
 }
-.book-card h3 { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; margin: 0 0 6px; line-height: 1.25; }
+.book-card h3 { font-family: 'Roboto Slab', serif; font-size: 17px; font-weight: 600; margin: 0 0 6px; line-height: 1.25; }
 .book-card .author { font-size: 13px; color: var(--ink-soft); margin-bottom: 12px; }
 .book-card .meta-row {
   display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace;
@@ -322,7 +339,7 @@ input, select { font-family: inherit; }
 /* ============ BOOK DETAIL MODAL ============ */
 .book-modal { max-width: 480px; }
 .book-modal .bm-cat { font-family: 'JetBrains Mono', monospace; font-size: 11px; text-transform: uppercase; color: var(--accent-2); }
-.book-modal h2 { font-family: 'Fraunces', serif; font-size: 24px; margin: 6px 0; }
+.book-modal h2 { font-family: 'Roboto Slab', serif; font-size: 24px; margin: 6px 0; }
 .book-modal .bm-author { color: var(--ink-soft); margin-bottom: 16px; }
 .book-modal .bm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; font-size: 13px; margin-bottom: 18px; }
 .book-modal .bm-grid dt { color: var(--ink-soft); }
@@ -354,7 +371,7 @@ input, select { font-family: inherit; }
 [data-addmode-panel][hidden] { display: none; }
 .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 10px; }
 .metric-card { background: var(--card); border: 1px solid var(--rule); border-radius: 8px; padding: 16px; }
-.metric-card .m-num { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: var(--accent); }
+.metric-card .m-num { font-family: 'Roboto Slab', serif; font-size: 24px; font-weight: 700; color: var(--accent); }
 .metric-card .m-lbl { font-size: 12px; color: var(--ink-soft); margin-top: 4px; }
 
 .admin-form { max-width: 480px; }
@@ -399,7 +416,7 @@ table.data-table tr.clickable:hover { background: rgba(122,59,46,0.08); }
 .book-cover {
   width: 100%; aspect-ratio: 3/4; border-radius: 3px 6px 6px 3px; margin-bottom: 10px;
   display: flex; align-items: center; justify-content: center;
-  font-family: 'Fraunces', serif; font-weight: 700; font-size: 15px; text-align: center; padding: 14px 10px;
+  font-family: 'Roboto Slab', serif; font-weight: 700; font-size: 15px; text-align: center; padding: 14px 10px;
   color: #fff; line-height: 1.25; position: relative; overflow: hidden;
   box-shadow:
     inset 3px 0 0 rgba(255,255,255,0.25),
@@ -431,11 +448,11 @@ table.data-table tr.clickable:hover { background: rgba(122,59,46,0.08); }
   width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: #fff;
   display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 15px; flex-shrink: 0;
 }
-.member-modal .mm-name { font-family: 'Fraunces', serif; font-size: 19px; font-weight: 600; }
+.member-modal .mm-name { font-family: 'Roboto Slab', serif; font-size: 19px; font-weight: 600; }
 .member-modal .mm-sub { font-size: 12px; color: var(--ink-soft); }
 .member-modal .mm-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 18px; }
 .member-modal .mm-stat { background: var(--paper); border-radius: 6px; padding: 10px; text-align: center; }
-.member-modal .mm-stat .n { font-family: 'Fraunces', serif; font-weight: 700; font-size: 18px; color: var(--accent); }
+.member-modal .mm-stat .n { font-family: 'Roboto Slab', serif; font-weight: 700; font-size: 18px; color: var(--accent); }
 .member-modal .mm-stat .l { font-size: 10px; color: var(--ink-soft); text-transform: uppercase; }
 .member-modal .mm-history-item {
   display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed var(--rule); font-size: 13px;
@@ -503,7 +520,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   border-radius: 10px; padding: 16px 18px; margin-bottom: 20px;
 }
 [data-theme="dark"] .announcement-card { background: linear-gradient(135deg, #3A2E10, #2E2410); border-color: #6B4E12; }
-.announcement-card h4 { font-family: 'Fraunces', serif; margin: 0 0 4px; font-size: 15px; }
+.announcement-card h4 { font-family: 'Roboto Slab', serif; margin: 0 0 4px; font-size: 15px; }
 .announcement-card p { margin: 0; font-size: 13px; color: var(--ink-soft); }
 
 /* ============ HOME SHELVES (New Arrivals / Trending) ============ */
