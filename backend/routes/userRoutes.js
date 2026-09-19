@@ -28,6 +28,7 @@ router.get("/:id/detail", requireAuth, requireRole("librarian", "admin"), async 
 
   const history = await Transaction.find({ user: user._id }).populate("book").sort({ createdAt: -1 });
   const currentlyBorrowed = history.filter((t) => t.status === "borrowed" || t.status === "overdue");
+  const lostBooks = history.filter((t) => t.status === "lost");
 
   // Bug fix: this used to sum fineAmount across ALL transactions, including ones
   // already marked finePaid — so a member who'd paid up still showed an outstanding
@@ -41,6 +42,7 @@ router.get("/:id/detail", requireAuth, requireRole("librarian", "admin"), async 
     user,
     history,
     currentlyBorrowed,
+    lostBooks,
     unpaidFines,
     unpaidFineTxns,
     totalFinesEverCharged,

@@ -4,6 +4,7 @@ const Book = require("../models/Book");
 const Transaction = require("../models/Transaction");
 const User = require("../models/User");
 const AuditLog = require("../models/AuditLog");
+const Payment = require("../models/Payment");
 const { requireAuth, requireRole } = require("../middleware/auth");
 const { toCsv } = require("../utils/csv");
 const { toPdf } = require("../utils/pdf");
@@ -45,6 +46,17 @@ router.get("/inventory", async (req, res) => {
 router.get("/borrowed", async (req, res) => {
   const borrowed = await Transaction.find({ status: "borrowed" }).populate("book user");
   res.json({ count: borrowed.length, borrowed });
+});
+
+router.get("/lost", async (req, res) => {
+  const lost = await Transaction.find({ status: "lost" }).populate("book user").sort({ updatedAt: -1 });
+  res.json({ count: lost.length, lost });
+});
+
+router.get("/payments", async (req, res) => {
+  const payments = await Payment.find().populate("user recordedBy transaction").sort({ createdAt: -1 });
+  const totalPaid = payments.reduce((sum, payment) => sum + payment.amount, 0);
+  res.json({ count: payments.length, totalPaid, payments });
 });
 
 // FR-07: Fines report
@@ -122,6 +134,22 @@ router.get("/fines/export-pdf", async (req, res) => {
     ],
     rows,
   });
+});
+
+router.get("/payments/export", async (req, res) => {
+  const payments = await Payment.find().populate("user recordedBy transaction").sort({ createdAt: -1 }).lean();
+  const rows = payments.map((p) => ({
+    date: new Date(p.createdAt).toLocaleString(),
+    borrower: p.user?.name || "—",
+    amount: p.amount,
+    method: p.method,
+    recordedBy: p.recordedBy?.name || "—",
+    note: p.note || "",
+  }));
+  const csv = toCsv(rows, ["date", "borrower", "amount", "method", "recordedBy", "note"]);
+  res.header("Content-Type", "text/csv");
+  res.attachment("libraryms_payment_report.csv");
+  res.send(csv);
 });
 
 // Export inventory summary as PDF

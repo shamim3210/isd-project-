@@ -330,6 +330,18 @@
         <div class="export-row">
           <button class="btn-ghost" id="exportCatalogBtn">⤓ Export catalog (CSV)</button>
           <button class="btn-ghost" id="exportFinesBtn">⤓ Export fines (CSV)</button>
+          <button class="btn-ghost" id="exportPaymentsBtn">⤓ Export payment report</button>
+        </div>
+        <div class="report-split-grid">
+          <section class="report-block">
+            <h3 class="sub-title">Manual payments</h3>
+            <div id="paymentsSummary" class="report-summary"></div>
+            <div id="paymentsTable" class="table-wrap"></div>
+          </section>
+          <section class="report-block">
+            <h3 class="sub-title">Lost books</h3>
+            <div id="lostBooksTable" class="table-wrap"></div>
+          </section>
         </div>
         <h3 class="sub-title">Currently borrowed</h3>
         <div id="borrowedTable" class="table-wrap"></div>

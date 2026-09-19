@@ -488,6 +488,11 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 }
 
 .export-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 14px 0 24px; }
+.report-split-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-bottom: 24px; }
+.report-block { min-width: 0; padding: 16px; border: 1px solid var(--glass-border); border-radius: 16px; background: rgba(255,255,255,0.38); box-shadow: 0 8px 20px rgba(31,61,78,0.07); }
+.report-block .sub-title { margin-top: 0; }
+.report-summary { margin: -4px 0 12px; color: var(--ink-soft); font-size: 13px; }
+.report-summary strong { color: var(--accent); font-size: 20px; }
 .verify-banner {
   background: #FFF6E5; border: 1px solid #D9A441; color: #5A4008;
   padding: 10px 16px; border-radius: 8px; font-size: 13px; margin-bottom: 18px;
@@ -614,6 +619,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   .section-heading-row { align-items: flex-start; flex-direction: column; gap: 8px; }
   .guide-grid { grid-template-columns: repeat(2, 1fr); }
   .search-row button { flex: 1; }
+  .report-split-grid { grid-template-columns: 1fr; }
   #view-admin:not([hidden]) { display: block; }
   #view-admin > .admin-tabs { margin-bottom: 18px; width: 100%; flex-direction: row; overflow-x: auto; }
   #view-admin > .admin-panel { margin-top: 0; }

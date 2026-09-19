@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const Transaction = require("../models/Transaction");
+const Payment = require("../models/Payment");
 const Book = require("../models/Book");
 const User = require("../models/User");
 const { requireAuth, requireRole } = require("../middleware/auth");
@@ -233,9 +234,21 @@ router.get("/overdue", async (req, res) => {
 
 // Librarian: mark a fine as paid (clears it from the borrower's fine cap total)
 router.patch("/:id/mark-paid", requireAuth, requireRole("librarian", "admin"), async (req, res) => {
-  const tx = await Transaction.findByIdAndUpdate(req.params.id, { finePaid: true }, { new: true });
+  const tx = await Transaction.findById(req.params.id).populate("book user");
   if (!tx) return res.status(404).json({ error: "Transaction not found" });
-  res.json(tx);
+  if (!tx.fineAmount) return res.status(400).json({ error: "This transaction has no fine." });
+  if (tx.finePaid) return res.status(400).json({ error: "This fine is already paid." });
+  tx.finePaid = true;
+  await tx.save();
+  const payment = await Payment.create({
+    transaction: tx._id,
+    user: tx.user._id,
+    amount: tx.fineAmount,
+    method: req.body?.method || "cash",
+    recordedBy: req.user.id,
+    note: req.body?.note || "Recorded at library desk",
+  });
+  res.json({ transaction: tx, payment });
 });
 
 // Student: report a borrowed book as lost — stops the fine clock, charges a

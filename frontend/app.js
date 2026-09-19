@@ -1238,9 +1238,13 @@ document.querySelectorAll("[data-addmode]").forEach((tab) => {
 async function loadAdminReports() {
   if (!state.user || !["librarian", "admin"].includes(state.user.role)) return;
   try {
-    const inv = await apiFetch("/reports/inventory");
-    const borrowed = await apiFetch("/reports/borrowed");
-    const fines = await apiFetch("/reports/fines");
+    const [inv, borrowed, fines, payments, lost] = await Promise.all([
+      apiFetch("/reports/inventory"),
+      apiFetch("/reports/borrowed"),
+      apiFetch("/reports/fines"),
+      apiFetch("/reports/payments"),
+      apiFetch("/reports/lost"),
+    ]);
 
     document.getElementById("reportMetrics").innerHTML = `
       <div class="metric-card"><div class="m-num">${inv.totalTitles.toLocaleString()}</div><div class="m-lbl">Total titles</div></div>
@@ -1263,10 +1267,20 @@ async function loadAdminReports() {
     document.getElementById("borrowedTable").innerHTML = borrowed.count
       ? `<table class="data-table"><thead><tr><th>Book</th><th>Borrower</th><th>Due</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>`
       : `<p class="hint">Nothing currently borrowed.</p>`;
+
+    document.getElementById("paymentsSummary").innerHTML = `<strong>৳${payments.totalPaid.toLocaleString()}</strong> collected across ${payments.count} payment${payments.count === 1 ? "" : "s"}`;
+    document.getElementById("paymentsTable").innerHTML = payments.payments.length
+      ? `<table class="data-table"><thead><tr><th>Date</th><th>Borrower</th><th>Amount</th><th>Method</th></tr></thead><tbody>${payments.payments.slice(0, 20).map((p) => `<tr><td>${new Date(p.createdAt).toLocaleDateString()}</td><td>${escapeHtml(p.user?.name || "—")}</td><td>৳${p.amount}</td><td>${escapeHtml(p.method)}</td></tr>`).join("")}</tbody></table>`
+      : `<p class="hint">No manual payments recorded yet.</p>`;
+    document.getElementById("lostBooksTable").innerHTML = lost.lost.length
+      ? `<table class="data-table"><thead><tr><th>Book</th><th>Borrower</th><th>Replacement fee</th><th>Payment</th></tr></thead><tbody>${lost.lost.map((t) => `<tr><td>${escapeHtml(t.book?.title || "—")}</td><td>${escapeHtml(t.user?.name || "—")}</td><td>৳${t.fineAmount || 0}</td><td>${t.finePaid ? "Paid" : "Unpaid"}</td></tr>`).join("")}</tbody></table>`
+      : `<p class="hint">No lost books reported.</p>`;
   } catch (e) {
     document.getElementById("reportMetrics").innerHTML = `<p class="hint">${escapeHtml(e.message)}</p>`;
   }
 }
+
+document.getElementById("exportPaymentsBtn").addEventListener("click", () => downloadWithAuth("/reports/payments/export", "libraryms_payment_report.csv"));
 
 document.getElementById("addBookForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -1494,7 +1508,7 @@ async function openMemberModal(userId) {
   memberModal.classList.add("open");
   try {
     const data = await apiFetch(`/users/${userId}/detail`);
-    const { user, history, currentlyBorrowed, unpaidFines, unpaidFineTxns } = data;
+    const { user, history, currentlyBorrowed, lostBooks = [], unpaidFines, unpaidFineTxns } = data;
     const initials = user.name.split(" ").map((w) => w[0]).slice(0, 2).join("").toUpperCase();
 
     const currentRows = currentlyBorrowed.length
@@ -1519,6 +1533,10 @@ async function openMemberModal(userId) {
         </div>`
       )
       .join("") || `<p class="hint">No return history yet.</p>`;
+
+    const lostRows = lostBooks.length
+      ? lostBooks.map((t) => `<div class="mm-history-item"><span>${escapeHtml(t.book?.title || "—")}</span><span class="mono">lost · ৳${t.fineAmount || 0}${t.finePaid ? " (paid)" : " (unpaid)"}</span></div>`).join("")
+      : `<p class="hint">No lost books reported.</p>`;
 
     // Unpaid fines with a cash "mark as paid" action — this was previously
     // missing entirely from the dashboard, so a librarian had no way to record
@@ -1551,6 +1569,8 @@ async function openMemberModal(userId) {
       ${currentRows}
       <h3 class="sub-title">Unpaid fines</h3>
       ${unpaidRows}
+      <h3 class="sub-title">Lost books</h3>
+      ${lostRows}
       <h3 class="sub-title">Return history</h3>
       ${pastRows}
       <div class="modal-actions" style="margin-top:16px;">
