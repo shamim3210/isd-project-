@@ -3,7 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<meta name="theme-color" content="#1F2937" />
+<meta name="theme-color" content="#15566B" />
+<meta name="description" content="LibraryMS is a university library management system for searching books, checking availability, borrowing, reservations, study rooms, and librarian reports." />
+<meta name="robots" content="index, follow" />
+<meta property="og:title" content="LibraryMS — University Library" />
+<meta property="og:description" content="Search, borrow, reserve, and manage university library books online." />
+<meta property="og:type" content="website" />
 <link rel="manifest" href="manifest.json" />
 <title>LibraryMS — University Library</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -30,10 +35,6 @@
       <button class="notif-bell-btn" id="notifBellBtn" title="Notifications" hidden>
         🔔<span class="notif-badge" id="notifBadge" hidden>0</span>
       </button>
-      <select class="lang-select" id="langSelect" aria-label="Language">
-        <option value="en">EN</option>
-        <option value="bn">বাংলা</option>
-      </select>
       <button class="api-config-btn" id="apiConfigBtn" title="Server settings">
         <span class="dot" id="connDot"></span> <span id="connLabel" data-i18n="server">Server</span>
       </button>
@@ -471,5 +472,13 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="i18n.js"></script>
 <script src="app.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "LibraryMS",
+  "description": "University library catalog and management system"
+}
+</script>
 </body>
 </html>

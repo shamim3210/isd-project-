@@ -113,15 +113,6 @@ input, select { font-family: inherit; }
 .nav-link.active { background: var(--accent); color: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 
 .topbar-right { display: flex; align-items: center; gap: 10px; margin-left: auto; }
-.lang-select {
-  background: rgba(255,255,255,0.84); border: 1px solid rgba(255,255,255,0.7); border-radius: 14px;
-  padding: 6px 10px; font-size: 12px; font-weight: 600; color: var(--ink);
-}
-.theme-toggle-btn {
-  background: #F5E8C9; border: 1px solid #E0C98F; border-radius: 50%;
-  width: 34px; height: 34px; font-size: 15px; color: #785B1B; box-shadow: 0 4px 12px rgba(120,91,27,0.16);
-}
-.theme-toggle-btn:hover { background: #EBD39B; border-color: #C9A957; transform: translateY(-2px); }
 .api-config-btn {
   display: flex; align-items: center; gap: 6px;
   background: #E7EFF5; border: 1px solid #B9CBD8;

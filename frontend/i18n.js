@@ -76,8 +76,7 @@ const translations = {
 };
 
 function t(key) {
-  const lang = localStorage.getItem("librarims_lang") || "en";
-  return (translations[lang] && translations[lang][key]) || translations.en[key] || key;
+  return translations.en[key] || key;
 }
 
 function applyTranslations() {
@@ -87,11 +86,10 @@ function applyTranslations() {
   document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
     el.placeholder = t(el.dataset.i18nPlaceholder);
   });
-  document.documentElement.lang = localStorage.getItem("librarims_lang") || "en";
+  document.documentElement.lang = "en";
 }
 
 function setLanguage(lang) {
-  localStorage.setItem("librarims_lang", lang);
   applyTranslations();
   if (typeof window.onLanguageChange === "function") window.onLanguageChange();
 }

@@ -102,8 +102,6 @@ function updateConnDot(ok) {
 }
 
 /* ===================== LANGUAGE ===================== */
-document.getElementById("langSelect").value = localStorage.getItem("librarims_lang") || "en";
-document.getElementById("langSelect").addEventListener("change", (e) => setLanguage(e.target.value));
 applyTranslations();
 window.onLanguageChange = () => {
   if (state.currentView === "home") loadHome();
