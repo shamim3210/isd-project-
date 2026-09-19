@@ -1,0 +1,86 @@
+const test = require("node:test");
+const assert = require("node:assert");
+const { isValidEmail, isStrongEnoughPassword, validateRegisterInput, validateBookInput } = require("../utils/validators");
+
+test("isValidEmail accepts well-formed emails", () => {
+  assert.strictEqual(isValidEmail("student@seu.edu.bd"), true);
+  assert.strictEqual(isValidEmail("a.b+c@example.com"), true);
+});
+
+test("isValidEmail rejects malformed emails", () => {
+  assert.strictEqual(isValidEmail("not-an-email"), false);
+  assert.strictEqual(isValidEmail("missing@domain"), false);
+  assert.strictEqual(isValidEmail(""), false);
+  assert.strictEqual(isValidEmail(undefined), false);
+});
+
+test("isStrongEnoughPassword enforces a 6 character minimum", () => {
+  assert.strictEqual(isStrongEnoughPassword("12345"), false);
+  assert.strictEqual(isStrongEnoughPassword("123456"), true);
+  assert.strictEqual(isStrongEnoughPassword(""), false);
+});
+
+test("validateRegisterInput flags every missing field", () => {
+  const errors = validateRegisterInput({ name: "", email: "bad", password: "123" });
+  assert.strictEqual(errors.length, 3);
+});
+
+test("validateRegisterInput passes for good input", () => {
+  const errors = validateRegisterInput({ name: "Nusrat Jahan", email: "nusrat@seu.edu.bd", password: "password123" });
+  assert.strictEqual(errors.length, 0);
+});
+
+test("validateBookInput requires title, author, isbn, category", () => {
+  const errors = validateBookInput({ title: "", author: "", isbn: "", category: "" });
+  assert.strictEqual(errors.length, 4);
+});
+
+test("validateBookInput passes for a complete book", () => {
+  const errors = validateBookInput({
+    title: "Introduction to Algorithms",
+    author: "Thomas H. Cormen",
+    isbn: "978-1000000000",
+    category: "Computer Science",
+  });
+  assert.strictEqual(errors.length, 0);
+});
+
+// --- Librarian/admin registration security ---
+
+test("resolveRegistrationRole always gives 'student' when librarian isn't requested", () => {
+  const { resolveRegistrationRole } = require("../utils/validators");
+  const result = resolveRegistrationRole("student", "", "SECRET123");
+  assert.deepStrictEqual(result, { role: "student" });
+});
+
+test("resolveRegistrationRole ignores an 'admin' request entirely and treats it as student", () => {
+  const { resolveRegistrationRole } = require("../utils/validators");
+  const result = resolveRegistrationRole("admin", "", "SECRET123");
+  assert.deepStrictEqual(result, { role: "student" });
+});
+
+test("resolveRegistrationRole rejects librarian request when no code is configured on the server", () => {
+  const { resolveRegistrationRole } = require("../utils/validators");
+  const result = resolveRegistrationRole("librarian", "anything", undefined);
+  assert.ok(result.error, "expected an error when no server code is configured");
+  assert.strictEqual(result.role, undefined);
+});
+
+test("resolveRegistrationRole rejects librarian request with a wrong or missing code", () => {
+  const { resolveRegistrationRole } = require("../utils/validators");
+  assert.ok(resolveRegistrationRole("librarian", "wrong-code", "SECRET123").error);
+  assert.ok(resolveRegistrationRole("librarian", "", "SECRET123").error);
+  assert.ok(resolveRegistrationRole("librarian", undefined, "SECRET123").error);
+});
+
+test("resolveRegistrationRole grants librarian only with the exact correct code", () => {
+  const { resolveRegistrationRole } = require("../utils/validators");
+  const result = resolveRegistrationRole("librarian", "SECRET123", "SECRET123");
+  assert.deepStrictEqual(result, { role: "librarian" });
+});
+
+test("resolveRegistrationRole trims whitespace around the provided code", () => {
+  const { resolveRegistrationRole } = require("../utils/validators");
+  const result = resolveRegistrationRole("librarian", "  SECRET123  ", "SECRET123");
+  assert.deepStrictEqual(result, { role: "librarian" });
+});
